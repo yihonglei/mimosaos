@@ -19,7 +19,7 @@
  * Comments/suggestions welcome on the email address below.
  *
  *
- * Copyright (c) 1992-1994 Angelo Haritsis <ah@doc.ic.ac.uk>
+ * Copyright (c) 1992-1994 Angelo Haritsis <ah@资料.ic.ac.uk>
  *
  * Redistribution and use in source and binary forms are permitted provided
  * that the above copyright notice and this paragraph are duplicated in all
@@ -706,7 +706,7 @@ show_help(char **argv, int *opt_now)
 	argv = argv, opt_now = opt_now; /* eliminate warning */
 	fprintf(fmsg,
 		PROG ": Execute and investigate interrupts/system data (ver " VERSION ")\n"
-		"Copyright (c) 1992-1994 A. Haritsis <ah@doc.ic.ac.uk>. Distribute freely.\n");
+		"Copyright (c) 1992-1994 A. Haritsis <ah@资料.ic.ac.uk>. Distribute freely.\n");
 	error_exit(0, help);
 	return (1);
 }
