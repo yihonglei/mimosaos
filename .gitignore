@@ -6,7 +6,7 @@ target/
 devenv
 *.log.*
 *.iml
-.idea/.DS_Store
+.idea
 localbin
 nohup.out
 .vscode
