@@ -37,14 +37,14 @@ start:
 	mov	ds,ax
 	mov	ah,#0x03	; read cursor pos
 	xor	bh,bh
-	int	0x10		; save it in known place, con_init fetches
-	mov	[0],dx		; it from 0x90000.
+	int	0x10		; save it in known place, con_init fetches // 取光标位置dx
+	mov	[0],dx		; it from 0x90000. // 取出光标位置(包括其他硬件参数)到0x9000处
 
 ; Get memory size (extended mem, kB)
 
 	mov	ah,#0x88
-	int	0x15
-	mov	[2],ax
+	int	0x15 // 获取内存大小
+	mov	[2],ax // 扩展内存大小
 
 ; Get video-card data:
 
@@ -121,7 +121,7 @@ do_move:
 	sub	di,di
 	sub	si,si
 	mov 	cx,#0x8000
-	rep
+	rep // 将 system 模块移动到 0 地址
 	movsw
 	jmp	do_move
 
