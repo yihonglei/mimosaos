@@ -49,14 +49,14 @@ ROOT_DEV = 0x306
 entry start // 关键字 entry 告诉链接器"程序入口"
 start:
 	mov	ax,#BOOTSEG
-	mov	ds,ax // 此条语句就是 0x07c0 处存放的语句！
+	mov	ds,ax // 此条语句就是 0x7c00 处存放的语句！
 	mov	ax,#INITSEG
 	mov	es,ax
 	mov	cx,#256
 	sub	si,si
 	sub	di,di
 	rep
-	movw // 将 0x07c0:0x0000 处的 256 个字移动到 0x9000:0x0000 处
+	movw // 将 0x7c00:0x0000 处的 256 个字移动到 0x9000:0x0000 处
 	jmpi	go,INITSEG
 go:	mov	ax,cs // cs=0x9000
 	mov	ds,ax

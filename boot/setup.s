@@ -202,7 +202,7 @@ empty_8042:
 	jnz	empty_8042	; yes - loop
 	ret
 
-gdt:
+gdt: // gdt 表
 	.word	0,0,0,0		; dummy
 
 	.word	0x07FF		; 8Mb - limit=2047 (2048*4096=8Mb)
@@ -215,7 +215,7 @@ gdt:
 	.word	0x9200		; data read/write
 	.word	0x00C0		; granularity=4096, 386
 
-idt_48:
+idt_48: // 保护模式中断函数表
 	.word	0			; idt limit=0
 	.word	0,0			; idt base=0L
 
