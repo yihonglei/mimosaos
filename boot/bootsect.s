@@ -53,10 +53,10 @@ start:
 	mov	ax,#INITSEG
 	mov	es,ax
 	mov	cx,#256
-	sub	si,si
+	sub	si,si // 等价于 sub a,b --> a = a - b，即 si = si - si, 就是把 si 清零
 	sub	di,di
 	rep
-	movw // 将 0x7c00:0x0000 处的 256 个字移动到 0x9000:0x0000 处
+	movw // 从 ds:si 处复制到 es:di 处，即将 0x7c00:0x0000 处的 256 个字移动到 0x9000:0x0000 处
 	jmpi	go,INITSEG
 go:	mov	ax,cs // cs=0x9000
 	mov	ds,ax
@@ -74,7 +74,7 @@ load_setup: // 载入 setup 模块
 	mov	bx,#0x0200		; address = 512, in INITSEG
 	mov	ax,#0x0200+SETUPLEN	; service 2, nr of sectors
 	int	0x13			; read it // BIOS 中断【0x13是BIOS读磁盘扇区的中断: ah=0x02-读磁盘，al=扇区数量（SETUPLEN=4），ch=柱面号，cl=开始扇区，dh=磁头号，dl=驱动器号，es:bx=内存地址】
-	jnc	ok_load_setup		; ok - continue
+	jnc	ok_load_setup		; ok - continue // 跳转到 ok_load_setup
 	mov	dx,#0x0000
 	mov	ax,#0x0000		; reset the diskette // 复位
 	int	0x13
