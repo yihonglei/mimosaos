@@ -78,7 +78,7 @@ load_setup: // 载入 setup 模块
 	mov	dx,#0x0000
 	mov	ax,#0x0000		; reset the diskette // 复位
 	int	0x13
-	j	load_setup // 重读
+	j	load_setup // 重读 setup.s 模块
 
 ok_load_setup: // 载入 setup 模块
 
