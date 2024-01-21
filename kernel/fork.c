@@ -44,7 +44,7 @@ int copy_mem(int nr,struct task_struct * p)
 
 	code_limit=get_limit(0x0f);
 	data_limit=get_limit(0x17);
-	old_code_base = get_base(current->ldt[1]); // 拷贝页表
+	old_code_base = get_base(current->ldt[1]); // 复制页表
 	old_data_base = get_base(current->ldt[2]);
 	if (old_data_base != old_code_base)
 		panic("We don't support separate I&D");
