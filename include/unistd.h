@@ -169,7 +169,6 @@ errno = -__res; \
 return -1; \
 }
 
-// C 语言内嵌汇编
 #define _syscall3(type,name,atype,a,btype,b,ctype,c) \
 type name(atype a,btype b,ctype c) \
 { \

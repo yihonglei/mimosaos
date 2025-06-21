@@ -107,8 +107,6 @@ void main(void)		/* This really IS void, no error here. */
  * Interrupts are still disabled. Do necessary setups, then
  * enable them
  */
-
-    // 根设备 ROOT_DEV，设备参数信息 drive_info，计算内存边界
  	ROOT_DEV = ORIG_ROOT_DEV;
  	drive_info = DRIVE_INFO;
 	memory_end = (1<<20) + (EXT_MEM_K<<10);
@@ -125,7 +123,6 @@ void main(void)		/* This really IS void, no error here. */
 #ifdef RAMDISK
 	main_memory_start += rd_init(main_memory_start, RAMDISK*1024);
 #endif
-	// 内存初始化 mem_init，中断初始化 trap_init，进程调度初始化 sched_init 等等
 	mem_init(main_memory_start,memory_end);
 	trap_init();
 	blk_dev_init();
@@ -136,7 +133,6 @@ void main(void)		/* This really IS void, no error here. */
 	buffer_init(buffer_memory_end);
 	hd_init();
 	floppy_init();
-	// 切换到用户态模式
 	sti();
 	move_to_user_mode();
 	if (!fork()) {		/* we count on this going ok */

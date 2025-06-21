@@ -389,8 +389,8 @@ void sched_init(void)
 
 	if (sizeof(struct sigaction) != 16)
 		panic("Struct sigaction MUST be 16 bytes");
-	set_tss_desc(gdt+FIRST_TSS_ENTRY,&(init_task.task.tss)); // TSS 任务状态段，保存和恢复进程的上下文
-	set_ldt_desc(gdt+FIRST_LDT_ENTRY,&(init_task.task.ldt)); // LDT 局部描述符表，是与 GDT 全局描述符表相对应的，内核态的代码用 GDT 里的数据段和代码段，而用户进程的代码用每个用户进程自己的 LDT 里得数据段和代码段
+	set_tss_desc(gdt+FIRST_TSS_ENTRY,&(init_task.task.tss));
+	set_ldt_desc(gdt+FIRST_LDT_ENTRY,&(init_task.task.ldt));
 	p = gdt+2+FIRST_TSS_ENTRY;
 	for(i=1;i<NR_TASKS;i++) {
 		task[i] = NULL;
@@ -408,5 +408,5 @@ void sched_init(void)
 	outb(LATCH >> 8 , 0x40);	/* MSB */
 	set_intr_gate(0x20,&timer_interrupt);
 	outb(inb_p(0x21)&~0x01,0x21);
-	set_system_gate(0x80,&system_call); // set_system_gate 用来设置 0x80 的中断处理
+	set_system_gate(0x80,&system_call);
 }

@@ -38,13 +38,12 @@ void verify_area(void * addr,int size)
 
 int copy_mem(int nr,struct task_struct * p)
 {
-    // 局部描述符表 LDT 赋值
 	unsigned long old_data_base,new_data_base,data_limit;
 	unsigned long old_code_base,new_code_base,code_limit;
 
 	code_limit=get_limit(0x0f);
 	data_limit=get_limit(0x17);
-	old_code_base = get_base(current->ldt[1]); // 复制页表
+	old_code_base = get_base(current->ldt[1]);
 	old_data_base = get_base(current->ldt[2]);
 	if (old_data_base != old_code_base)
 		panic("We don't support separate I&D");

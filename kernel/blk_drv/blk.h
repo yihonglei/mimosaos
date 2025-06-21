@@ -21,15 +21,15 @@
  * read/write completion.
  */
 struct request {
-	int dev;		/* -1 if no request */ // 表示设备号，-1 就表示空闲
-	int cmd;		/* READ or WRITE */ // 表示命令，其实就是 READ 还是 WRITE，也就表示本次操作是读还是写
-	int errors; // 表示操作时产生的错误次数
-	unsigned long sector; // 表示起始扇区
-	unsigned long nr_sectors; // 表示扇区数
-	char * buffer; // 表示数据缓冲区，也就是读盘之后的数据放在内存中的什么位置
-	struct task_struct * waiting; // 是个 task_struct 结构，这可以表示一个进程，也就表示是哪个进程发起了这个请求
-	struct buffer_head * bh; // 是缓冲区头指针，这个后面讲完缓冲区就懂了，因为这个 request 是需要与缓冲区挂钩的
-	struct request * next; // 指向了下一个请求项
+	int dev;		/* -1 if no request */
+	int cmd;		/* READ or WRITE */
+	int errors;
+	unsigned long sector;
+	unsigned long nr_sectors;
+	char * buffer;
+	struct task_struct * waiting;
+	struct buffer_head * bh;
+	struct request * next;
 };
 
 /*

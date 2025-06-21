@@ -22,16 +22,12 @@ SYSSIZE = 0x3000
 ; read errors will result in a unbreakable loop. Reboot by hand. It
 ; loads pretty fast by getting whole sectors at a time whenever possible.
 
-/*
- * .text 等是伪操作符，告诉编译器产生文本段，.text 用于标识文本段的开始位置。
- * 此处的.text、.data、.bss表明这3个段重叠，不分段！
- */
 .globl begtext, begdata, begbss, endtext, enddata, endbss
-.text // 文本段
+.text
 begtext:
-.data // 数据段
+.data
 begdata:
-.bss // 未初始化数据段
+.bss
 begbss:
 .text
 
@@ -46,46 +42,46 @@ ENDSEG   = SYSSEG + SYSSIZE		; where to stop loading
 ;		0x301 - first partition on first drive etc
 ROOT_DEV = 0x306
 
-entry start // 关键字 entry 告诉链接器"程序入口"
+entry start
 start:
 	mov	ax,#BOOTSEG
-	mov	ds,ax // 此条语句就是 0x7c00 处存放的语句！
+	mov	ds,ax
 	mov	ax,#INITSEG
 	mov	es,ax
 	mov	cx,#256
-	sub	si,si // 等价于 sub a,b --> a = a - b，即 si = si - si, 就是把 si 清零
+	sub	si,si
 	sub	di,di
 	rep
-	movw // 从 ds:si 处复制到 es:di 处，即将 0x7c00:0x0000 处的 256 个字移动到 0x9000:0x0000 处
+	movw
 	jmpi	go,INITSEG
-go:	mov	ax,cs // cs=0x9000
+go:	mov	ax,cs
 	mov	ds,ax
 	mov	es,ax
 ; put stack at 0x9ff00.
 	mov	ss,ax
-	mov	sp,#0xFF00		; arbitrary value >>512 // 为 call 做准备
+	mov	sp,#0xFF00		; arbitrary value >>512
 
 ; load the setup-sectors directly after the bootblock.
 ; Note that 'es' is already set up.
 
-load_setup: // 载入 setup 模块
+load_setup:
 	mov	dx,#0x0000		; drive 0, head 0
 	mov	cx,#0x0002		; sector 2, track 0
 	mov	bx,#0x0200		; address = 512, in INITSEG
 	mov	ax,#0x0200+SETUPLEN	; service 2, nr of sectors
-	int	0x13			; read it // BIOS 中断【0x13是BIOS读磁盘扇区的中断: ah=0x02-读磁盘，al=扇区数量（SETUPLEN=4），ch=柱面号，cl=开始扇区，dh=磁头号，dl=驱动器号，es:bx=内存地址】
-	jnc	ok_load_setup		; ok - continue // 跳转到 ok_load_setup
+	int	0x13			; read it
+	jnc	ok_load_setup		; ok - continue
 	mov	dx,#0x0000
-	mov	ax,#0x0000		; reset the diskette // 复位
+	mov	ax,#0x0000		; reset the diskette
 	int	0x13
-	j	load_setup // 重读 setup.s 模块
+	j	load_setup
 
-ok_load_setup: // 载入 setup 模块
+ok_load_setup:
 
 ; Get disk drive parameters, specifically nr of sectors/track
 
 	mov	dl,#0x00
-	mov	ax,#0x0800		; AH=8 is get drive parameters // ah=8 获得磁盘参数
+	mov	ax,#0x0800		; AH=8 is get drive parameters
 	int	0x13
 	mov	ch,#0x00
 	seg cs
@@ -97,20 +93,20 @@ ok_load_setup: // 载入 setup 模块
 
 	mov	ah,#0x03		; read cursor pos
 	xor	bh,bh
-	int	0x10 // 读光标
+	int	0x10
 	
 	mov	cx,#24
 	mov	bx,#0x0007		; page 0, attribute 7 (normal)
 	mov	bp,#msg1
 	mov	ax,#0x1301		; write string, move cursor
-	int	0x10 // 显示字符
+	int	0x10
 
 ; ok, we've written the message, now
 ; we want to load the system (at 0x10000)
 
-	mov	ax,#SYSSEG // SYSSEG=0x1000
+	mov	ax,#SYSSEG
 	mov	es,ax		; segment of 0x010000
-	call	read_it // 读入 system 模块
+	call	read_it
 	call	kill_motor
 
 ; After that we check which root-device to use. If the device is
@@ -140,7 +136,7 @@ root_defined:
 ; the setup-routine loaded directly after
 ; the bootblock:
 
-	jmpi	0,SETUPSEG // 转入 0x9020:0x0000 执行 setup.s
+	jmpi	0,SETUPSEG
 
 ; This routine loads the system at address 0x10000, making sure
 ; no 64kB boundaries are crossed. We try to load it as fast as
@@ -165,7 +161,7 @@ rp_read:
 ok1_read:
 	seg cs
 	mov ax,sectors
-	sub ax,sread // sread 是当前磁道已读扇区数，ax 未读扇区数
+	sub ax,sread
 	mov cx,ax
 	shl cx,#9
 	add cx,bx
@@ -175,7 +171,7 @@ ok1_read:
 	sub ax,bx
 	shr ax,#9
 ok2_read:
-	call read_track // 读磁道...
+	call read_track
 	mov cx,ax
 	add ax,sread
 	seg cs
@@ -254,7 +250,7 @@ msg1:
 root_dev:
 	.word ROOT_DEV
 boot_flag:
-	.word 0xAA55 // 扇区的最后两个字节
+	.word 0xAA55
 
 .text
 endtext:

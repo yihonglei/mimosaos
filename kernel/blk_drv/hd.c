@@ -154,7 +154,7 @@ int sys_setup(void * BIOS)
 	if (NR_HD)
 		printk("Partition table%s ok.\n\r",(NR_HD>1)?"s":"");
 	rd_load();
-	mount_root(); // 加载根文件系统
+	mount_root();
 	return (0);
 }
 

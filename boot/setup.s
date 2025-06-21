@@ -37,14 +37,14 @@ start:
 	mov	ds,ax
 	mov	ah,#0x03	; read cursor pos
 	xor	bh,bh
-	int	0x10		; save it in known place, con_init fetches // 取光标位置dx
-	mov	[0],dx		; it from 0x90000. // 取出光标位置(包括其他硬件参数)到0x9000处
+	int	0x10		; save it in known place, con_init fetches
+	mov	[0],dx		; it from 0x90000.
 
 ; Get memory size (extended mem, kB)
 
 	mov	ah,#0x88
-	int	0x15 // 获取内存大小
-	mov	[2],ax // 扩展内存大小
+	int	0x15
+	mov	[2],ax
 
 ; Get video-card data:
 
@@ -121,7 +121,7 @@ do_move:
 	sub	di,di
 	sub	si,si
 	mov 	cx,#0x8000
-	rep // 将 system 模块移动到 0 地址
+	rep
 	movsw
 	jmp	do_move
 
@@ -202,7 +202,7 @@ empty_8042:
 	jnz	empty_8042	; yes - loop
 	ret
 
-gdt: // gdt 表
+gdt:
 	.word	0,0,0,0		; dummy
 
 	.word	0x07FF		; 8Mb - limit=2047 (2048*4096=8Mb)
@@ -215,7 +215,7 @@ gdt: // gdt 表
 	.word	0x9200		; data read/write
 	.word	0x00C0		; granularity=4096, 386
 
-idt_48: // 保护模式中断函数表
+idt_48:
 	.word	0			; idt limit=0
 	.word	0,0			; idt base=0L
 
